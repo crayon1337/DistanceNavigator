@@ -21,6 +21,12 @@ Please note that, this is basic yet powerful implementation where I utilize the 
 
 It can be extended by writing few test-cases for the flow as well as re-tries methodologies.
 
+I've read few articles like the following to build the latitude & longitude distance calculation forumla.
+https://www.sisense.com/blog/latitude-longitude-distance-calculation-explained/
+
+Forumla:
+`=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371 (6371 is Earth radius in km.)`
+
 # Results
 ![Alt text](doc/terminal-output.png)
 ![Alt text](doc/google-maps-example.png)
