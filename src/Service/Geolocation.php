@@ -19,7 +19,7 @@ class Geolocation implements LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function getDistance(Address $destinationAddress, array $locations)
+    public function getDistances(Address $destinationAddress, array $locations)
     {
         $destination = $this->positionStackAPI->getForward(address: $destinationAddress);
 
@@ -31,14 +31,13 @@ class Geolocation implements LoggerAwareInterface
         $startPoints = $this->getPoints($locations);
         $data = [];
 
-        foreach ($startPoints as $index => $startPoint) {
+        foreach ($startPoints as $startPoint) {
             list($distance, $label) = $this->calculateDistance(
                 destination: $destination,
                 startingPoint: $startPoint
             );
 
             $data[] = [
-                'id' => $index + 1,
                 'from' => $startPoint->getTitle(),
                 'to' => $destination->getTitle(),
                 'distance' => $distance,
@@ -55,7 +54,8 @@ class Geolocation implements LoggerAwareInterface
             return $b['distance'] < $a['distance'] ? 1 : -1;
         });
 
-        return $data;
+        // Using array_values() to reset the index after filtering out the null values.
+        return array_values($data);
     }
 
     private function getPoints(array $locations)
@@ -66,8 +66,7 @@ class Geolocation implements LoggerAwareInterface
             , array: $locations
         );
 
-        // Using array_values() to reset the index after filtering out the null values.
-        return array_values(array_filter($points, fn(?Address $point) => !is_null($point)));
+        return array_filter($points, fn(?Address $point) => !is_null($point));
     }
 
     private function calculateDistance(Address $startingPoint, Address $destination): array

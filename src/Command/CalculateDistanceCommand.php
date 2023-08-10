@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\DTO\Address;
+use App\Helpers\FileHelper;
 use App\Service\Geolocation;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -33,9 +34,15 @@ class CalculateDistanceCommand extends Command
             new Address(title: "Neverland - 5225 Figueroa Mountain Road, Los Olivos, Calif. 93441, USA")
         ];
 
-        $result = $this->geolocation->getDistance(destinationAddress: $destination, locations: $addresses);
+        $distances = $this->geolocation->getDistances(destinationAddress: $destination, locations: $addresses);
 
-        dump($result);
+        if (empty($distances)) {
+            return COMMAND::FAILURE;
+        }
+
+        FileHelper::exportDistances('distances.csv', $distances);
+
+        $output->writeln('distances.csv file has been generated.');
 
         return Command::SUCCESS;
     }
