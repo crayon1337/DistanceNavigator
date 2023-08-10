@@ -33,7 +33,7 @@ class CalculateDistanceCommand extends Command
             new Address(title: "Neverland - 5225 Figueroa Mountain Road, Los Olivos, Calif. 93441, USA")
         ];
 
-        $result = $this->geolocation->getDistance(destination: $destination, locations: $addresses);
+        $result = $this->geolocation->getDistance(destinationAddress: $destination, locations: $addresses);
 
         dump($result);
 
