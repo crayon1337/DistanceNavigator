@@ -54,7 +54,8 @@ class Geolocation implements LoggerAwareInterface
             , array: $locations
         );
 
-        return array_filter($points, fn(?Address $point) => !is_null($point));
+        // Using array_values() to reset the index after filtering out the null values.
+        return array_values(array_filter($points, fn(?Address $point) => !is_null($point)));
     }
 
     public function getDestination(Address $address): ?Address
