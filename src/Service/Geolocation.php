@@ -34,8 +34,8 @@ class Geolocation implements LoggerAwareInterface
         foreach ($startPoints as $index => $startPoint) {
             $data[] = [
                 'id' => $index + 1,
-                'from' => $startPoint->getLabel(),
-                'to' => $destination->getLabel(),
+                'from' => $startPoint->getTitle(),
+                'to' => $destination->getTitle(),
                 'distance' => $this->calculateDistance(
                     destination: $destination,
                     startingPoint: $startPoint

@@ -6,7 +6,6 @@ class Address
 {
     public function __construct(
         private string $title,
-        private ?string $label = null,
         private ?float $latitude = null,
         private ?float $longitude = null,
         private ?array $data = []
@@ -47,15 +46,5 @@ class Address
     public function getData(): array
     {
         return $this->data;
-    }
-
-    public function setLabel(string $label): void
-    {
-        $this->label = $label;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
     }
 }

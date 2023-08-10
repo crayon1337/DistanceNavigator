@@ -75,7 +75,6 @@ class PositionStackAPI implements LoggerAwareInterface
 
     private function hydrateAddressObject(Address $address, array $response): Address
     {
-        $address->setLabel($response['data'][0]['label']);
         $address->setLatitude($response['data'][0]['latitude']);
         $address->setLongitude($response['data'][0]['longitude']);
         $address->setData($response['data'][0]);
