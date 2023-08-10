@@ -1,6 +1,10 @@
 # Distance Measurement
 This simple Symfony CLI application will go through 8 addresses and calculate the distance between each address to Adchieve HQ. 
 
+# Prerequisites
+- PHP 8.2.8
+- Composer 2.X
+
 # Installation
 - Clone this repo
 - `composer install`
