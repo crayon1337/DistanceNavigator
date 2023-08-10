@@ -24,7 +24,7 @@ It can be extended by writing few test-cases for the flow as well as re-tries me
 I've read few articles like the following to build the latitude & longitude distance calculation forumla.
 https://www.sisense.com/blog/latitude-longitude-distance-calculation-explained/
 
-Forumla:
+Formula:
 `=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371 (6371 is Earth radius in km.)`
 
 # Results
