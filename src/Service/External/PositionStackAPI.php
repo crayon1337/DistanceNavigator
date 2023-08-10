@@ -10,9 +10,8 @@ use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * This class will be used to determine information about geo locations.
- * 
- * @method getForward(string $query)
+ * This class will be used to interact with PositionStack API
+ * In order to find out geolocation information
  */
 class PositionStackAPI implements LoggerAwareInterface
 {
