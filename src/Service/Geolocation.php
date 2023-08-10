@@ -19,9 +19,9 @@ class Geolocation implements LoggerAwareInterface
         $this->logger = $logger;
     }
 
-    public function getDistance(Address $destination, array $locations)
+    public function getDistance(Address $destinationAddress, array $locations)
     {
-        $destination = $this->getDestination($destination);
+        $destination = $this->positionStackAPI->getForward(address: $destinationAddress);
 
         if (empty($destination)) {
             $this->logger->critical('Could not fetch destination info. Terminating...');
@@ -56,11 +56,6 @@ class Geolocation implements LoggerAwareInterface
 
         // Using array_values() to reset the index after filtering out the null values.
         return array_values(array_filter($points, fn(?Address $point) => !is_null($point)));
-    }
-
-    public function getDestination(Address $address): ?Address
-    {
-        return $this->positionStackAPI->getForward(address: $address);
     }
 
     private function calculateDistance(Address $startingPoint, Address $destination)
