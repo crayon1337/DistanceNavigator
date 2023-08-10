@@ -58,7 +58,7 @@ class Geolocation implements LoggerAwareInterface
         return array_values(array_filter($points, fn(?Address $point) => !is_null($point)));
     }
 
-    private function calculateDistance(Address $startingPoint, Address $destination)
+    private function calculateDistance(Address $startingPoint, Address $destination): string
     {
         // Convert latitude and longitude from degrees to radians
         $startPointLatitude = deg2rad($startingPoint->getLatitude());
@@ -75,6 +75,6 @@ class Geolocation implements LoggerAwareInterface
         $radius_of_earth = 6371.0; // Earth's radius in kilometers
         $distance = $radius_of_earth * $c;
 
-        return number_format($distance, 2);
+        return number_format($distance, 2) . " km";
     }
 }
