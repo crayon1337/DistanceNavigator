@@ -4,7 +4,7 @@ This simple Symfony CLI application will go through 8 addresses and calculate th
 # Installation
 - Clone this repo
 - `composer install`
-- Grab PositionStack API key and edit it in the .env file (The defualt one works)
+- Grab PositionStack API key and edit it in the .env file (It is also pre-configured)
 
 # Usage
 As simple as executing `php bin/console calculate:distance` and you will see the output in your terminal with the progress.
