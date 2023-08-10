@@ -4,30 +4,46 @@ namespace App\Service;
 
 use App\DTO\Address;
 use App\Service\External\PositionStackAPI;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 
-class Geolocation
+class Geolocation implements LoggerAwareInterface
 {
-    public function __construct(protected PositionStackAPI $positionStackAPI)
+    public function __construct(protected PositionStackAPI $positionStackAPI, protected LoggerInterface $logger)
     {
 
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 
     public function getDistance(Address $destination, array $locations)
     {
         $destination = $this->getDestination($destination);
 
-        return array_map(
-            callback: fn(Address $startingPoint): array =>
-            [
-                'from' => $startingPoint->getLabel(),
+        if (empty($destination)) {
+            $this->logger->critical('Could not fetch destination info. Terminating...');
+            return;
+        }
+
+        $startPoints = $this->getPoints($locations);
+        $data = [];
+
+        foreach ($startPoints as $index => $startPoint) {
+            $data[] = [
+                'id' => $index + 1,
+                'from' => $startPoint->getLabel(),
                 'to' => $destination->getLabel(),
                 'distance' => $this->calculateDistance(
                     destination: $destination,
-                    startingPoint: $startingPoint
+                    startingPoint: $startPoint
                 )
-            ]
-            , array: $this->getPoints($locations)
-        );
+            ];
+        }
+
+        return $data;
     }
 
     private function getPoints(array $locations)
