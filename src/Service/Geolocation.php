@@ -32,16 +32,28 @@ class Geolocation implements LoggerAwareInterface
         $data = [];
 
         foreach ($startPoints as $index => $startPoint) {
+            list($distance, $label) = $this->calculateDistance(
+                destination: $destination,
+                startingPoint: $startPoint
+            );
+
             $data[] = [
                 'id' => $index + 1,
                 'from' => $startPoint->getTitle(),
                 'to' => $destination->getTitle(),
-                'distance' => $this->calculateDistance(
-                    destination: $destination,
-                    startingPoint: $startPoint
-                )
+                'distance' => $distance,
+                'distance_label' => $label
             ];
         }
+
+        // Sorting results so that the closest route will have higher priorty.
+        usort($data, function ($a, $b) {
+            if ($a['distance'] == $b['distance']) {
+                return 0;
+            }
+
+            return $b['distance'] < $a['distance'] ? 1 : -1;
+        });
 
         return $data;
     }
@@ -58,7 +70,7 @@ class Geolocation implements LoggerAwareInterface
         return array_values(array_filter($points, fn(?Address $point) => !is_null($point)));
     }
 
-    private function calculateDistance(Address $startingPoint, Address $destination): string
+    private function calculateDistance(Address $startingPoint, Address $destination): array
     {
         $earthRadius = 6371.0; // Earth's radius in kilometers
 
@@ -76,6 +88,9 @@ class Geolocation implements LoggerAwareInterface
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         $distance = $earthRadius * $c;
 
-        return number_format($distance, 2) . " km";
+        return [
+            $distance,
+            number_format($distance, 2) . " km",
+        ];
     }
 }
