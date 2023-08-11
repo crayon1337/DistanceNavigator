@@ -36,7 +36,7 @@ class PositionStackAPI implements LoggerAwareInterface
             $response = $this->httpClient->request('GET', 'http://api.positionstack.com/v1/forward', [
                 'query' => [
                     'access_key' => $this->accessKey,
-                    'query' => $address->getTitle()
+                    'query' => $address->getName()
                 ]
             ]);
 
@@ -44,7 +44,7 @@ class PositionStackAPI implements LoggerAwareInterface
             $data = Sorter::make(data: $data['data'], key: 'confidence', direction: 'DESC');
 
             if (empty($data)) {
-                $this->logger->critical(sprintf('Could not find results for %s', $address->getTitle()));
+                $this->logger->critical(sprintf('Could not find results for %s', $address->getName()));
                 return null;
             }
 
@@ -53,7 +53,7 @@ class PositionStackAPI implements LoggerAwareInterface
             $this->logger->critical(
                 sprintf(
                     'Could not fetch forward geo information to %s. Message: %s',
-                    $address->getTitle(),
+                    $address->getName(),
                     $exception->getMessage()
                 ), $exception->getTrace()
             );

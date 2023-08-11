@@ -5,28 +5,24 @@ namespace App\Service;
 use App\DTO\Address;
 use App\Helpers\Sorter;
 use App\Service\External\PositionStackAPI;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 
-class Geolocation implements LoggerAwareInterface
+class Geolocation implements GeolocationInterface
 {
-    public function __construct(protected PositionStackAPI $positionStackAPI, protected LoggerInterface $logger)
+    use LoggerAwareTrait;
+
+    public function __construct(protected PositionStackAPI $positionStackAPI)
     {
 
     }
 
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
-
-    public function getDistances(Address $destinationAddress, array $locations)
+    public function getDistances(Address $destinationAddress, array $locations): array
     {
         $destination = $this->positionStackAPI->getForward(address: $destinationAddress);
 
         if (empty($destination)) {
             $this->logger->critical('Could not fetch destination info. Terminating...');
-            return;
+            return [];
         }
 
         $startPoints = $this->getPoints($locations);
@@ -36,15 +32,7 @@ class Geolocation implements LoggerAwareInterface
 
     private function resolveDistances(Address $destination, array $startPoints)
     {
-        $data = [
-            [
-                'ID',
-                'From',
-                'To',
-                'Distance',
-                'Distance Label'
-            ]
-        ];
+        $data = [];
 
         foreach ($startPoints as $index => $startPoint) {
             list($distance, $label) = $this->calculateDistance(
@@ -54,8 +42,8 @@ class Geolocation implements LoggerAwareInterface
 
             $data[] = [
                 'id' => $index + 1,
-                'from' => $startPoint->getTitle(),
-                'to' => $destination->getTitle(),
+                'from' => $startPoint->getName(),
+                'to' => $destination->getName(),
                 'distance' => $distance,
                 'distance_label' => $label
             ];

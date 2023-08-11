@@ -5,7 +5,8 @@ namespace App\DTO;
 class Address
 {
     public function __construct(
-        private string $title,
+        private string $name,
+        private string $address,
         private ?float $latitude = null,
         private ?float $longitude = null,
         private ?array $data = []
@@ -13,9 +14,24 @@ class Address
 
     }
 
-    public function getTitle(): string
+    public function getName(): string
     {
-        return $this->title;
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): void
+    {
+        $this->address = $address;
     }
 
     public function setLatitude(float $latitude): void
