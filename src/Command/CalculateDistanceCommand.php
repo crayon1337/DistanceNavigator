@@ -42,7 +42,7 @@ class CalculateDistanceCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $filePath = $input->getArgument(name: 'file') ?? 'addresses.json';
+        $filePath = $input->getArgument(name: 'file') ?? 'files/addresses.json';
         $file = $this->fileReader->make(filePath: $filePath);
 
         if (!$file->exists()) {
@@ -83,7 +83,7 @@ class CalculateDistanceCommand extends Command
 
     private function generateCsv(array $distances, OutputInterface $output)
     {
-        FileHelper::export(fileName: 'distances.csv', data: $distances, headers: $this->getTableHeader());
+        FileHelper::export(fileName: 'files/distances.csv', data: $distances, headers: $this->getTableHeader());
         $output->writeln("[distances.csv] file has been generated.");
     }
 
