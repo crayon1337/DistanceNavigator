@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\Address;
+use App\Helpers\DistanceCalculator;
 use App\Helpers\Sorter;
 use App\Service\External\MapClientInterface;
 use Psr\Log\LoggerAwareInterface;
@@ -14,80 +15,47 @@ class Geolocation implements GeolocationInterface, LoggerAwareInterface
 
     public function __construct(protected MapClientInterface $mapApi)
     {
-
     }
 
-    public function getDistances(Address $destinationAddress, array $locations): array
+    public function getDistances(Address $destinationAddress, array $addresses): array
     {
         $destination = $this->mapApi->resolveAddressInfo(address: $destinationAddress);
+        $distances = [];
 
         if (empty($destination)) {
             $this->logger->critical('Could not fetch destination info. Terminating...');
             return [];
         }
 
-        $startPoints = $this->getPoints($locations);
+        foreach ($addresses as $address) {
+            $addressObject = $this->mapApi->resolveAddressInfo($address);
 
-        return $this->resolveDistances($destination, $startPoints);
-    }
+            if (is_null($addressObject)) {
+                continue;
+            }
 
-    private function resolveDistances(Address $destination, array $startPoints)
-    {
-        $data = [];
+            $distance = DistanceCalculator::make($addressObject, $destination);
 
-        foreach ($startPoints as $index => $startPoint) {
-            list($distance, $label) = $this->calculateDistance(
-                destination: $destination,
-                startingPoint: $startPoint
-            );
-
-            $data[] = [
-                'id' => $index + 1,
-                'from' => $startPoint->getName(),
-                'to' => $destination->getName(),
+            $distances[] = [
                 'distance' => $distance,
-                'distance_label' => $label
+                'name' => $address->getName(),
+                'address' => $address->getAddress(),
             ];
         }
 
-        // Sorting results so that the closest route will have higher priorty.
-        $data = Sorter::make(data: $data, key: 'distance');
+        $distances = Sorter::make(data: $distances, key: 'distance');
 
-        return $data;
-    }
+        $formattedDistances = [];
 
-    private function getPoints(array $locations)
-    {
-        $points = array_map(
-            callback: fn($location) =>
-            $this->mapApi->resolveAddressInfo(address: $location)
-            , array: $locations
-        );
+        foreach ($distances as $index => $distance) {
+            $formattedDistances[] = [
+                'id' => $index + 1,
+                'distance' => DistanceCalculator::label($distance['distance']),
+                'name' => $distance['name'],
+                'address' => $distance['address']
+            ];
+        }
 
-        return array_filter($points, fn(?Address $point) => !is_null($point));
-    }
-
-    private function calculateDistance(Address $startingPoint, Address $destination): array
-    {
-        $earthRadius = 6371.0; // Earth's radius in kilometers
-
-        // Convert latitude and longitude from degrees to radians
-        $startPointLatitude = deg2rad($startingPoint->getLatitude());
-        $startPointLongitude = deg2rad($startingPoint->getLongitude());
-
-        $desintationLatitude = deg2rad($destination->getLatitude());
-        $destinationLongitude = deg2rad($destination->getLongitude());
-
-        // Haversine formula
-        $dlat = $desintationLatitude - $startPointLatitude;
-        $dlon = $destinationLongitude - $startPointLongitude;
-        $a = sin($dlat / 2) ** 2 + cos($startPointLatitude) * cos($desintationLatitude) * sin($dlon / 2) ** 2;
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-        $distance = $earthRadius * $c;
-
-        return [
-            $distance,
-            number_format($distance, 2) . " km",
-        ];
+        return $formattedDistances;
     }
 }

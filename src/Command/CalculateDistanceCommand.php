@@ -42,14 +42,25 @@ class CalculateDistanceCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $file = $this->fileReader->make(filePath: $input->getArgument(name: 'file'));
+        $filePath = $input->getArgument(name: 'file');
+        $file = $this->fileReader->make(filePath: $filePath);
 
         if (!$file->exists()) {
             $output->writeln('The specified JSON file does not exist.');
-            return COMMAND::FAILURE;
+            return COMMAND::INVALID;
         }
 
         $data = $file->toArray();
+
+        if (is_null($data)) {
+            $output->writeln(messages: 'Error decoding JSON');
+            return COMMAND::FAILURE;
+        }
+
+        if (!isset($data['destination']) && !isset($data['addresses'])) {
+            $output->writeln(messages: 'We were unable to detect addresses and destination in the file you provided.');
+            return COMMAND::FAILURE;
+        }
 
         $destination = $this->addressFactory->make(data: $data['destination']);
         $addresses = [];
@@ -58,9 +69,9 @@ class CalculateDistanceCommand extends Command
             $addresses[] = $this->addressFactory->make(data: $address);
         }
 
-        $distances = $this->geolocation->getDistances(destinationAddress: $destination, locations: $addresses);
+        $distances = $this->geolocation->getDistances(destinationAddress: $destination, addresses: $addresses);
 
-        if (!is_array($distances) || count($distances) === 1) {
+        if (empty($distances)) {
             return COMMAND::FAILURE;
         }
 
@@ -72,7 +83,7 @@ class CalculateDistanceCommand extends Command
 
     private function generateCsv(string $fileName, array $distances, OutputInterface $output)
     {
-        FileHelper::export($fileName, $distances);
+        FileHelper::export(fileName: $fileName, data: $distances, headers: $this->getTableHeader());
         $output->writeln("[$fileName] file has been generated.");
     }
 
@@ -80,8 +91,13 @@ class CalculateDistanceCommand extends Command
     {
         $table = new Table($output);
         $table
-            ->setHeaders(['Sort Number', 'From', 'To', 'Distance'])
+            ->setHeaders($this->getTableHeader())
             ->setRows($distances)
             ->render();
+    }
+
+    private function getTableHeader(): array
+    {
+        return ['Sort Number', 'Distance', 'Name', 'Address'];
     }
 }
