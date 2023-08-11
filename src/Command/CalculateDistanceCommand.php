@@ -34,7 +34,7 @@ class CalculateDistanceCommand extends Command
         $this
             ->addArgument(
                 name: 'file',
-                mode: InputArgument::REQUIRED,
+                mode: InputArgument::OPTIONAL,
                 description: 'Path to JSON file that contains destination and adresses.'
             )
             ->setHelp(help: 'This command allows you to calculate distance between points and a destination. Results will be generated to a CSV file.');
@@ -42,7 +42,7 @@ class CalculateDistanceCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $filePath = $input->getArgument(name: 'file');
+        $filePath = $input->getArgument(name: 'file') ?? 'addresses.json';
         $file = $this->fileReader->make(filePath: $filePath);
 
         if (!$file->exists()) {

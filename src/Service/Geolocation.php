@@ -20,12 +20,13 @@ class Geolocation implements GeolocationInterface, LoggerAwareInterface
     public function getDistances(Address $destinationAddress, array $addresses): array
     {
         $destination = $this->mapApi->resolveAddressInfo(address: $destinationAddress);
-        $distances = [];
 
         if (empty($destination)) {
             $this->logger->critical('Could not fetch destination info. Terminating...');
             return [];
         }
+
+        $distances = [];
 
         foreach ($addresses as $address) {
             $addressObject = $this->mapApi->resolveAddressInfo($address);
