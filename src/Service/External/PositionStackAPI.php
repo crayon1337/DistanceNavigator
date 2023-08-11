@@ -57,7 +57,8 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
                     'Could not fetch forward geo information to %s. Message: %s',
                     $address->getName(),
                     $exception->getMessage()
-                ), $exception->getTrace()
+                ),
+                $exception->getTrace()
             );
 
             return null;

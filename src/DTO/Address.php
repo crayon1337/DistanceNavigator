@@ -11,7 +11,6 @@ class Address
         private ?float $longitude = null,
         private ?array $data = []
     ) {
-
     }
 
     public function getName(): string

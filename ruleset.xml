@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="TestaViva Standard">
+    <description>Extended PSR12 standard.</description>
+
+    <rule ref="PSR12" />
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="250"/>
+            <property name="absoluteLineLimit" value="0"/>
+        </properties>
+    </rule>
+</ruleset>
