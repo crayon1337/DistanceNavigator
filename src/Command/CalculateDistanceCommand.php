@@ -36,11 +36,11 @@ class CalculateDistanceCommand extends Command
 
         $distances = $this->geolocation->getDistances(destinationAddress: $destination, locations: $addresses);
 
-        if (empty($distances)) {
+        if (!is_array($distances) || count($distances) === 1) {
             return COMMAND::FAILURE;
         }
 
-        FileHelper::exportDistances('distances.csv', $distances);
+        FileHelper::export('distances.csv', $distances);
 
         $output->writeln('distances.csv file has been generated.');
 

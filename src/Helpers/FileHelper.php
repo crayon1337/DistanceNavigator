@@ -4,46 +4,14 @@ namespace App\Helpers;
 
 class FileHelper
 {
-    public static function exportDistances(string $fileName, array $distances): void
+    public static function export(string $fileName, array $data): void
     {
-        $fp = fopen('distances.csv', 'w');
-        $distances = self::formatDistances($distances);
-        $distances = self::appendHeaders($distances);
+        $fp = fopen($fileName, 'w');
 
-        foreach ($distances as $index => $distance) {
-            fputcsv($fp, $distance, ',');
+        foreach ($data as $row) {
+            fputcsv($fp, $row, ',');
         }
 
         fclose($fp);
-    }
-
-    private static function formatDistances(array $distances)
-    {
-        $data = [];
-
-        foreach ($distances as $index => $distance) {
-            $data[] = [
-                'id' => $index + 1,
-                'from' => $distance['from'],
-                'to' => $distance['to'],
-                'distance' => $distance['distance_label']
-            ];
-        }
-
-        return $data;
-    }
-
-    private static function appendHeaders(array $distances)
-    {
-        $header = [
-            'SortNumber',
-            'From',
-            'To',
-            'Distance'
-        ];
-
-        array_unshift($distances, $header);
-
-        return $distances;
     }
 }

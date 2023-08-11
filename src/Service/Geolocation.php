@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\DTO\Address;
+use App\Helpers\Sorter;
 use App\Service\External\PositionStackAPI;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -29,15 +30,30 @@ class Geolocation implements LoggerAwareInterface
         }
 
         $startPoints = $this->getPoints($locations);
-        $data = [];
 
-        foreach ($startPoints as $startPoint) {
+        return $this->resolveDistances($destination, $startPoints);
+    }
+
+    private function resolveDistances(Address $destination, array $startPoints)
+    {
+        $data = [
+            [
+                'ID',
+                'From',
+                'To',
+                'Distance',
+                'Distance Label'
+            ]
+        ];
+
+        foreach ($startPoints as $index => $startPoint) {
             list($distance, $label) = $this->calculateDistance(
                 destination: $destination,
                 startingPoint: $startPoint
             );
 
             $data[] = [
+                'id' => $index + 1,
                 'from' => $startPoint->getTitle(),
                 'to' => $destination->getTitle(),
                 'distance' => $distance,
@@ -46,16 +62,9 @@ class Geolocation implements LoggerAwareInterface
         }
 
         // Sorting results so that the closest route will have higher priorty.
-        usort($data, function ($a, $b) {
-            if ($a['distance'] == $b['distance']) {
-                return 0;
-            }
+        $data = Sorter::make(data: $data, key: 'distance');
 
-            return $b['distance'] < $a['distance'] ? 1 : -1;
-        });
-
-        // Using array_values() to reset the index after filtering out the null values.
-        return array_values($data);
+        return $data;
     }
 
     private function getPoints(array $locations)

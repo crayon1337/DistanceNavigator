@@ -3,6 +3,7 @@
 namespace App\Service\External;
 
 use App\DTO\Address;
+use App\Helpers\Sorter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
@@ -40,10 +41,9 @@ class PositionStackAPI implements LoggerAwareInterface
             ]);
 
             $data = $response->toArray();
+            $data = Sorter::make(data: $data['data'], key: 'confidence', direction: 'DESC');
 
-            $this->sortByConfidence($data);
-
-            if (empty($data['data'])) {
+            if (empty($data)) {
                 $this->logger->critical(sprintf('Could not find results for %s', $address->getTitle()));
                 return null;
             }
@@ -62,21 +62,11 @@ class PositionStackAPI implements LoggerAwareInterface
         }
     }
 
-    private function sortByConfidence(array $data)
-    {
-        usort($data, function ($a, $b) {
-            if ($a['data']['confidence'] == $b['confidence']) {
-                return 0;
-            }
-            return ($a['confidence'] > $b['confidence']) ? -1 : 1;
-        });
-    }
-
     private function hydrateAddressObject(Address $address, array $response): Address
     {
-        $address->setLatitude($response['data'][0]['latitude']);
-        $address->setLongitude($response['data'][0]['longitude']);
-        $address->setData($response['data'][0]);
+        $address->setLatitude($response[0]['latitude']);
+        $address->setLongitude($response[0]['longitude']);
+        $address->setData($response[0]);
 
         return $address;
     }
