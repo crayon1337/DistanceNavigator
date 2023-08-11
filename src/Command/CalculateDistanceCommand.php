@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Factory\AddressFactoryInterface;
 use App\Helpers\FileHelper;
-use App\Helpers\FileReaderInterface;
+use App\Service\FileReaderInterface;
 use App\Service\GeolocationInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Attribute\AsCommand;

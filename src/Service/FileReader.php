@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Service;
 
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class JsonReader implements FileReaderInterface
+class FileReader implements FileReaderInterface
 {
     use LoggerAwareTrait;
 
     private string $filePath;
     private string $data;
 
-    public function make(string $filePath): JsonReader
+    public function make(string $filePath): FileReader
     {
         $this->filePath = $filePath;
 
@@ -39,7 +39,7 @@ class JsonReader implements FileReaderInterface
         return $fileSystem->exists($this->filePath);
     }
 
-    public function toJson(): string
+    public function content(): string
     {
         return $this->data;
     }

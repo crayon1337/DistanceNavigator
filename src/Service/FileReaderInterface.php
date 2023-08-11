@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Service;
 
 interface FileReaderInterface
 {
-    public function make(string $filePath): JsonReader;
+    public function make(string $filePath): FileReader;
 
     public function exists(): bool;
 
-    public function toJson(): string;
+    public function content(): string;
 
     public function toArray(): array;
 }
