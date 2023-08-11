@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 class Sorter
 {
-    public static function make(array $data, string $key, string $direction = 'ASC')
+    public static function make(array $data, string $key, string $direction = 'ASC'): array
     {
         usort($data, function ($a, $b) use ($key, $direction) {
             if (!isset($a[$key]) || !isset($b[$key])) {

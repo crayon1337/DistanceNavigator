@@ -6,5 +6,5 @@ use App\DTO\Address;
 
 interface GeolocationInterface
 {
-    public function getDistances(Address $destinationAddress, array $locations): array;
+    public function getDistances(Address $destinationAddress, array $addresses): array;
 }

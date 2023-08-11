@@ -16,7 +16,7 @@ class FileHelper
         fclose($fp);
     }
 
-    private static function prependHeaders(array $data, array $headers)
+    private static function prependHeaders(array $data, array $headers): array
     {
         array_unshift($data, $headers);
 

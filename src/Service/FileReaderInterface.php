@@ -10,5 +10,5 @@ interface FileReaderInterface
 
     public function content(): string;
 
-    public function toArray(): array;
+    public function toArray(): ?array;
 }

@@ -6,8 +6,11 @@ use App\DTO\Address;
 use App\Helpers\Sorter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Symfony\Component\HttpClient\Exception\ClientException;
-use Symfony\Component\HttpClient\Exception\ServerException;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -43,7 +46,13 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
             }
 
             return $this->hydrateAddressObject($address, $data);
-        } catch (ServerException | ClientException $exception) {
+        } catch (
+            ServerExceptionInterface |
+            ClientExceptionInterface |
+            TransportExceptionInterface |
+            RedirectionExceptionInterface |
+            DecodingExceptionInterface $exception
+        ) {
             $this->logger->critical(
                 sprintf(
                     'Could not fetch forward geo information to %s. Message: %s',

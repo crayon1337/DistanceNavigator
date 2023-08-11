@@ -75,16 +75,16 @@ class CalculateDistanceCommand extends Command
             return COMMAND::FAILURE;
         }
 
-        $this->generateCsv(fileName: 'distances.csv', distances: $distances, output: $output);
+        $this->generateCsv(distances: $distances, output: $output);
         $this->renderTable(output: $output, distances: $distances);
 
         return Command::SUCCESS;
     }
 
-    private function generateCsv(string $fileName, array $distances, OutputInterface $output)
+    private function generateCsv(array $distances, OutputInterface $output)
     {
-        FileHelper::export(fileName: $fileName, data: $distances, headers: $this->getTableHeader());
-        $output->writeln("[$fileName] file has been generated.");
+        FileHelper::export(fileName: 'distances.csv', data: $distances, headers: $this->getTableHeader());
+        $output->writeln("[distances.csv] file has been generated.");
     }
 
     private function renderTable(OutputInterface $output, array $distances)

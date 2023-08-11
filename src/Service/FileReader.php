@@ -45,7 +45,7 @@ class FileReader implements FileReaderInterface, LoggerAwareInterface
         return $this->data;
     }
 
-    public function toArray(): array
+    public function toArray(): ?array
     {
         return json_decode(json: $this->data, associative: true);
     }
