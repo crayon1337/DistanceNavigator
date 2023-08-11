@@ -38,14 +38,13 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
             ]);
 
             $data = $response->toArray();
-            $data = Sorter::make(data: $data['data'], key: 'confidence', direction: 'DESC');
 
-            if (empty($data)) {
+            if (empty($data['data'])) {
                 $this->logger->critical(sprintf('Could not find results for %s', $address->getName()));
                 return null;
             }
 
-            return $this->hydrateAddressObject($address, $data);
+            return $this->hydrateAddressObject($address, $data['data']);
         } catch (
             ServerExceptionInterface |
             ClientExceptionInterface |
