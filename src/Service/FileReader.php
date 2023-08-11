@@ -2,11 +2,12 @@
 
 namespace App\Service;
 
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FileReader implements FileReaderInterface
+class FileReader implements FileReaderInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 

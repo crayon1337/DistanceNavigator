@@ -5,7 +5,7 @@ namespace App\Service\External;
 use App\DTO\Address;
 use App\Helpers\Sorter;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -14,23 +14,17 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * This class will be used to interact with PositionStack API
  * In order to find out geolocation information
  */
-class PositionStackAPI implements LoggerAwareInterface
+class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
 {
+    use LoggerAwareTrait;
+
     public function __construct(
         protected HttpClientInterface $httpClient,
-        protected $accessKey,
-        protected LoggerInterface $logger
+        protected $accessKey
     ) {
-        $this->httpClient = $httpClient;
-        $this->accessKey = $accessKey;
     }
 
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
-
-    public function getForward(Address $address): ?Address
+    public function resolveAddressInfo(Address $address): ?Address
     {
         try {
             $response = $this->httpClient->request('GET', 'http://api.positionstack.com/v1/forward', [

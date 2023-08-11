@@ -6,7 +6,6 @@ use App\Factory\AddressFactoryInterface;
 use App\Helpers\FileHelper;
 use App\Service\FileReaderInterface;
 use App\Service\GeolocationInterface;
-use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
@@ -22,8 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class CalculateDistanceCommand extends Command
 {
-    use LoggerAwareTrait;
-
     public function __construct(
         protected GeolocationInterface $geolocation,
         protected AddressFactoryInterface $addressFactory,

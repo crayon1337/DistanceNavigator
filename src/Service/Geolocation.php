@@ -4,21 +4,22 @@ namespace App\Service;
 
 use App\DTO\Address;
 use App\Helpers\Sorter;
-use App\Service\External\PositionStackAPI;
+use App\Service\External\MapClientInterface;
+use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-class Geolocation implements GeolocationInterface
+class Geolocation implements GeolocationInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    public function __construct(protected PositionStackAPI $positionStackAPI)
+    public function __construct(protected MapClientInterface $mapApi)
     {
 
     }
 
     public function getDistances(Address $destinationAddress, array $locations): array
     {
-        $destination = $this->positionStackAPI->getForward(address: $destinationAddress);
+        $destination = $this->mapApi->resolveAddressInfo(address: $destinationAddress);
 
         if (empty($destination)) {
             $this->logger->critical('Could not fetch destination info. Terminating...');
@@ -59,7 +60,7 @@ class Geolocation implements GeolocationInterface
     {
         $points = array_map(
             callback: fn($location) =>
-            $this->positionStackAPI->getForward(address: $location)
+            $this->mapApi->resolveAddressInfo(address: $location)
             , array: $locations
         );
 
