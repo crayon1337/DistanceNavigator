@@ -62,8 +62,8 @@ class CalculateDistanceCommand extends Command
 
             $distances = $this->locationService->getDistances(destinationAddress: $destination, addresses: $addresses);
 
-            $this->generateCsv(distances: $distances, output: $output);
             $this->renderTable(output: $output, distances: $distances);
+            $this->generateCsv(distances: $distances, output: $output);
         } catch (AddressNotFoundException | FileNotFoundException | InvalidJsonException | InvalidDataException $exception) {
             $output->writeln(messages: $exception->getMessage());
             return Command::FAILURE;
