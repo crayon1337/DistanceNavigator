@@ -18,6 +18,11 @@ framework:
     php_errors:
         log: true
 
+    http_client:
+        scoped_clients:
+            position_stack.client:
+                base_uri: '%app.position_stack_base_url%'
+
 when@test:
     framework:
         test: true

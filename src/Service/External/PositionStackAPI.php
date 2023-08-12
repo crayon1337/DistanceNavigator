@@ -24,7 +24,7 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
     use LoggerAwareTrait;
 
     public function __construct(
-        protected HttpClientInterface $httpClient,
+        protected HttpClientInterface $positionStackClient,
         protected $accessKey
     ) {
     }
@@ -37,7 +37,7 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
     public function resolveAddressInfo(Address $address): Address
     {
         try {
-            $response = $this->httpClient->request('GET', 'http://api.positionstack.com/v1/forward', [
+            $response = $this->positionStackClient->request('GET', '/v1/forward', [
                 'query' => [
                     'access_key' => $this->accessKey,
                     'query' => $address->getAddress(),
