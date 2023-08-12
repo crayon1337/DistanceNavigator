@@ -2,16 +2,21 @@
 
 namespace App\Command;
 
+use App\Exceptions\AddressNotFoundException;
+use App\Exceptions\InvalidDataException;
+use App\Exceptions\InvalidJsonException;
 use App\Factory\AddressFactoryInterface;
 use App\Helpers\FileHelper;
 use App\Service\FileReaderInterface;
-use App\Service\GeolocationInterface;
+use App\Service\LocationInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 // The name of the command is what users type after "php bin/console"
 #[AsCommand(
@@ -21,10 +26,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class CalculateDistanceCommand extends Command
 {
+    private string $defaultJsonFilePath = 'files/addresses.json';
+    private string $csvFilePath = 'files/distances.csv';
+
     public function __construct(
-        protected GeolocationInterface $geolocation,
+        protected LocationInterface       $locationService,
         protected AddressFactoryInterface $addressFactory,
-        protected FileReaderInterface $fileReader
+        protected FileReaderInterface     $fileReader
     ) {
         parent::__construct();
     }
@@ -42,58 +50,38 @@ class CalculateDistanceCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $filePath = $input->getArgument(name: 'file') ?? 'files/addresses.json';
-        $file = $this->fileReader->make(filePath: $filePath);
+        $filePath = $input->getArgument(name: 'file') ?? $this->defaultJsonFilePath;
 
-        if (!$file->exists()) {
-            $output->writeln('The specified JSON file does not exist.');
-            return COMMAND::INVALID;
+        try {
+            $data = $this->fileReader->make(filePath: $filePath)->toArray();
+
+            $destination = $this->addressFactory->make(data: $data['destination']);
+            $addresses = $this->addressFactory->resolveAddresses(data: $data['addresses']);
+
+            $distances = $this->locationService->getDistances(destinationAddress: $destination, addresses: $addresses);
+
+            $this->generateCsv(distances: $distances, output: $output);
+            $this->renderTable(output: $output, distances: $distances);
+        } catch (AddressNotFoundException | FileNotFoundException | InvalidJsonException | InvalidDataException $exception) {
+            $output->writeln(messages: $exception->getMessage());
+            return Command::FAILURE;
         }
-
-        $data = $file->toArray();
-
-        if (is_null($data)) {
-            $output->writeln(messages: 'Error decoding JSON');
-            return COMMAND::FAILURE;
-        }
-
-        if (!isset($data['destination']) && !isset($data['addresses'])) {
-            $output->writeln(messages: 'We were unable to detect addresses and destination in the file you provided.');
-            return COMMAND::FAILURE;
-        }
-
-        $destination = $this->addressFactory->make(data: $data['destination']);
-        $addresses = [];
-
-        foreach ($data['addresses'] as $address) {
-            $addresses[] = $this->addressFactory->make(data: $address);
-        }
-
-        $distances = $this->geolocation->getDistances(destinationAddress: $destination, addresses: $addresses);
-
-        if (empty($distances)) {
-            return COMMAND::FAILURE;
-        }
-
-        $this->generateCsv(distances: $distances, output: $output);
-        $this->renderTable(output: $output, distances: $distances);
 
         return Command::SUCCESS;
     }
 
     private function generateCsv(array $distances, OutputInterface $output)
     {
-        FileHelper::export(fileName: 'files/distances.csv', data: $distances, headers: $this->getTableHeader());
+        FileHelper::export(fileName: $this->csvFilePath, data: $distances, headers: $this->getTableHeader());
         $output->writeln("[distances.csv] file has been generated.");
     }
 
     private function renderTable(OutputInterface $output, array $distances)
     {
         $table = new Table($output);
-        $table
-            ->setHeaders($this->getTableHeader())
-            ->setRows($distances)
-            ->render();
+        $table->setHeaders($this->getTableHeader())
+              ->setRows($distances)
+              ->render();
     }
 
     private function getTableHeader(): array

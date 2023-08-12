@@ -2,13 +2,24 @@
 
 namespace App\Service;
 
+use App\Exceptions\InvalidJsonException;
+
 interface FileReaderInterface
 {
-    public function make(string $filePath): FileReader;
+    /**
+     * @param string $filePath
+     * @return FileService
+     */
+    public function make(string $filePath): FileService;
 
-    public function exists(): bool;
-
+    /**
+     * @return string
+     */
     public function content(): string;
 
-    public function toArray(): ?array;
+    /**
+     * @return array
+     * @throws InvalidJsonException
+     */
+    public function toArray(): array;
 }

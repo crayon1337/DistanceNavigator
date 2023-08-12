@@ -3,8 +3,14 @@
 namespace App\Service\External;
 
 use App\DTO\Address;
+use App\Exceptions\AddressNotFoundException;
 
 interface MapClientInterface
 {
-    public function resolveAddressInfo(Address $address): ?Address;
+    /**
+     * @param Address $address
+     * @return Address
+     * @throws AddressNotFoundException
+     */
+    public function resolveAddressInfo(Address $address): Address;
 }
