@@ -28,13 +28,12 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 )]
 class CalculateDistanceCommand extends Command
 {
-    private string $defaultJsonFilePath = 'files/addresses.json';
-    private string $csvFilePath = 'files/distances.csv';
-
     public function __construct(
         protected LocationInterface $locationService,
         protected AddressFactoryInterface $addressFactory,
-        protected FileReaderInterface $fileReader
+        protected FileReaderInterface $fileReader,
+        private readonly string $defaultJsonFilePath = 'files/addresses.json',
+        private readonly string $csvFilePath = 'files/distances.csv'
     ) {
         parent::__construct();
     }
