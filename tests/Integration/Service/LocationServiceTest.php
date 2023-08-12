@@ -7,7 +7,8 @@ use App\Exceptions\AddressNotFoundException;
 use App\Exceptions\InvalidDataException;
 use App\Exceptions\InvalidJsonException;
 use App\Factory\AddressFactoryInterface;
-use App\Service\External\PositionStack\PositionStackAPI;
+use App\Service\External\MapClient\PositionStack\PositionStackAPI;
+use App\Service\External\MapClient\PositionStack\Query;
 use App\Service\FileReaderInterface;
 use App\Service\LocationInterface;
 use App\Service\LocationService;
@@ -20,6 +21,9 @@ class LocationServiceTest extends KernelTestCase
 {
     protected MockHttpClient $httpClient;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp(); //
@@ -32,24 +36,21 @@ class LocationServiceTest extends KernelTestCase
     public function testAddressInformationCanBeResolvedUsingAPI(): void
     {
         // Setup
-        $address = new Address(
-            name: 'Adchieve HQ',
-            address: "Sint Janssingel 92, 5211 DA 's-Hertogenbosch, The Netherlands",
-            latitude: 51.6882,
-            longitude: 5.298532
+        $query = new Query(
+            id: 'Adchieve HQ',
+            address: "Sint Janssingel 92, 5211 DA 's-Hertogenbosch, The Netherlands"
         );
         $mapClient = new PositionStackAPI($this->httpClient, 'accessKey');
 
         // Act
-        $addressInformation = $mapClient->resolveAddressInfo(address: $address);
+        $addressInformation = $mapClient->fetchGeoInformation(query: $query)->first();
 
         // Assert
         $this->assertNotNull($addressInformation->getLatitude());
         $this->assertNotNull($addressInformation->getLongitude());
-        $this->assertNotNull($addressInformation->getData());
         $this->assertEquals(51.6882, $addressInformation->getLatitude());
         $this->assertEquals(5.298532, $addressInformation->getLongitude());
-        $this->assertEquals("Sint Janssingel 92, 's Hertogenbosch, NB, Netherlands", $addressInformation->getData()['label']);
+        $this->assertEquals("Sint Janssingel 92, 's Hertogenbosch, NB, Netherlands", $addressInformation->getLabel());
     }
 
     /**
@@ -105,6 +106,9 @@ class LocationServiceTest extends KernelTestCase
 ');
     }
 
+    /**
+     * @throws Exception
+     */
     private function mockAddressesResponse(): MockHttpClient
     {
         $info = [

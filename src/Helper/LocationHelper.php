@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Helper;
 
-use App\DTO\Address;
+use App\Service\External\MapClient\MapAddress;
 
 class LocationHelper
 {
     /**
      * Calculate distance between two points by latitude and longitude.
      *
-     * @param Address $startingPoint
-     * @param Address $destination
+     * @param MapAddress $startingPoint
+     * @param MapAddress $destination
      *
      * @return float Distance between points in [km]
      */
-    public static function calculateDistance(Address $startingPoint, Address $destination): float
+    public static function calculateDistance(MapAddress $startingPoint, MapAddress $destination): float
     {
         $rad = M_PI / 180;
 
@@ -32,6 +32,10 @@ class LocationHelper
         return acos($dist) / $rad * 60 *  1.853;
     }
 
+    /**
+     * @param float $distance
+     * @return string
+     */
     public static function getDistanceLabel(float $distance): string
     {
         return number_format($distance, 2) . ' km';

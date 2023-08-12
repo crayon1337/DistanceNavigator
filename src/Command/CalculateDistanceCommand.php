@@ -54,6 +54,8 @@ class CalculateDistanceCommand extends Command
         $filePath = $input->getArgument(name: 'file') ?? $this->defaultJsonFilePath;
 
         try {
+            $output->writeln(messages: 'Distance calculation process has started.');
+
             $data = $this->fileReader->read(filePath: $filePath)->toArray();
 
             $destination = $this->addressFactory->make(data: $data['destination']);
@@ -71,17 +73,17 @@ class CalculateDistanceCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function generateCsv(array $distances, OutputInterface $output)
+    private function generateCsv(array $distances, OutputInterface $output): void
     {
         FileHelper::export(fileName: $this->csvFilePath, data: $distances, headers: $this->getTableHeader());
-        $output->writeln("[distances.csv] file has been generated.");
+        $output->writeln(messages: "[distances.csv] file has been generated.");
     }
 
-    private function renderTable(OutputInterface $output, array $distances)
+    private function renderTable(OutputInterface $output, array $distances): void
     {
-        $table = new Table($output);
-        $table->setHeaders($this->getTableHeader())
-              ->setRows($distances)
+        $table = new Table(output: $output);
+        $table->setHeaders(headers: $this->getTableHeader())
+              ->setRows(rows: $distances)
               ->render();
     }
 

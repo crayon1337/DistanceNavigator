@@ -6,6 +6,7 @@ namespace App\Tests\Unit\Helper;
 
 use App\DTO\Address;
 use App\Helper\LocationHelper;
+use App\Service\External\MapClient\PositionStack\PositionStackAddress;
 use PHPUnit\Framework\TestCase;
 
 class LocationHelperTest extends TestCase
@@ -65,13 +66,13 @@ class LocationHelperTest extends TestCase
         $this->assertEquals('62.58 km', $label);
     }
 
-    private function getAddress(string $name, string $address, float $latitude, float $longitude): Address
+    private function getAddress(string $name, string $address, float $latitude, float $longitude): PositionStackAddress
     {
-        return new Address(
-            name: $name,
-            address: $address,
+        return new PositionStackAddress(
+            id: $name,
             latitude: $latitude,
-            longitude: $longitude
+            longitude: $longitude,
+            label: $address
         );
     }
 }

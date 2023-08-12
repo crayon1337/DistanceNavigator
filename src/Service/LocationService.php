@@ -7,7 +7,8 @@ namespace App\Service;
 use App\DTO\Address;
 use App\Exceptions\AddressNotFoundException;
 use App\Helper\LocationHelper;
-use App\Service\External\MapClientInterface;
+use App\Service\External\MapClient\MapClientInterface;
+use App\Service\External\MapClient\PositionStack\Query;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -30,22 +31,22 @@ class LocationService implements LocationInterface, LoggerAwareInterface
      */
     public function getDistances(Address $destinationAddress, array $addresses): array
     {
-        $destination = $this->mapApi->resolveAddressInfo(address: $destinationAddress);
-        $distances = [];
+        $query = new Query(id: $destinationAddress->getName(), address: $destinationAddress->getAddress());
+        $destination = $this->mapApi->fetchGeoInformation($query)->first();
 
         foreach ($addresses as $address) {
-            // If things goes wrong. We need to continue. So that, we only skip the address
-            // We had problem with. Better some than none.
             try {
-                $addressObject = $this->mapApi->resolveAddressInfo(address: $address);
+                $query->setId($address->getName());
+                $query->setAddress($address->getAddress());
+                $addressObject = $this->mapApi->fetchGeoInformation($query)->first();
 
                 $distances[] = [
                     'distance' => LocationHelper::calculateDistance($addressObject, $destination),
                     'name' => $address->getName(),
                     'address' => $address->getAddress(),
                 ];
-            } catch (AddressNotFoundException) {
-                $this->logger->error("Could not resolve information for {$address->getName()}");
+            } catch (AddressNotFoundException $e) {
+                $this->logger->error("Could not resolve information for {$address->getName()}", $e->getTrace());
             }
         }
 
@@ -60,17 +61,13 @@ class LocationService implements LocationInterface, LoggerAwareInterface
      */
     private function formatDistances(array $distances): array
     {
-        $formattedDistances = [];
-
-        foreach ($distances as $index => $distance) {
-            $formattedDistances[] = [
+        return array_map(function ($index, $distance) {
+            return [
                 'id' => $index + 1,
                 'distance' => LocationHelper::getDistanceLabel($distance['distance']),
                 'name' => $distance['name'],
                 'address' => $distance['address']
             ];
-        }
-
-        return $formattedDistances;
+        }, array_keys($distances), $distances);
     }
 }
