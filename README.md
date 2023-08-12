@@ -30,5 +30,4 @@ Formula:
 `=acos(sin(lat1)*sin(lat2)+cos(lat1)*cos(lat2)*cos(lon2-lon1))*6371 (6371 is Earth radius in km.)`
 
 # Results
-![Alt text](doc/terminal-output.png)
-![Alt text](doc/google-maps-example.png)
+You can see a sample of results in [this CSV file](https://github.com/crayon1337/DistanceNavigator/blob/main/files/distances.csv)

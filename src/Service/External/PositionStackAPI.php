@@ -40,7 +40,8 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
             $response = $this->httpClient->request('GET', 'http://api.positionstack.com/v1/forward', [
                 'query' => [
                     'access_key' => $this->accessKey,
-                    'query' => $address->getName()
+                    'query' => $address->getAddress(),
+                    'limit' => 1,
                 ]
             ]);
 

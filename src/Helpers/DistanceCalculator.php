@@ -9,30 +9,27 @@ use App\DTO\Address;
 class DistanceCalculator
 {
     /**
-     * Calculates the distance between two given address objects.
+     * Optimized algorithm from http://www.codexworld.com
+     *
      * @param Address $startingPoint
      * @param Address $destination
      *
-     * @return float
+     * @return float Distance between points in [km]
      */
     public static function make(Address $startingPoint, Address $destination): float
     {
-        $earthRadius = 6371.0; // Earth's radius in kilometers
+        $rad = M_PI / 180;
 
-        // Convert latitude and longitude from degrees to radians
-        $startPointLatitude = deg2rad($startingPoint->getLatitude());
-        $startPointLongitude = deg2rad($startingPoint->getLongitude());
+        //Calculate distance from latitude and longitude
+        $theta = $startingPoint->getLongitude() - $destination->getLongitude();
 
-        $destinationLatitude = deg2rad($destination->getLatitude());
-        $destinationLongitude = deg2rad($destination->getLongitude());
+        $dist = sin($startingPoint->getLatitude() * $rad)
+            * sin($destination->getLatitude() * $rad)
+            + cos($startingPoint->getLatitude() * $rad)
+            * cos($destination->getLatitude() * $rad)
+            * cos($theta * $rad);
 
-        // Haversine formula
-        $dlat = $destinationLatitude - $startPointLatitude;
-        $dlon = $destinationLongitude - $startPointLongitude;
-        $a = sin($dlat / 2) ** 2 + cos($startPointLatitude) * cos($destinationLatitude) * sin($dlon / 2) ** 2;
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-
-        return $earthRadius * $c;
+        return acos($dist) / $rad * 60 *  1.853;
     }
 
     public static function label(float $distance): string
