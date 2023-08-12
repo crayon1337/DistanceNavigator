@@ -30,9 +30,9 @@ class CalculateDistanceCommand extends Command
     private string $csvFilePath = 'files/distances.csv';
 
     public function __construct(
-        protected LocationInterface       $locationService,
+        protected LocationInterface $locationService,
         protected AddressFactoryInterface $addressFactory,
-        protected FileReaderInterface     $fileReader
+        protected FileReaderInterface $fileReader
     ) {
         parent::__construct();
     }
