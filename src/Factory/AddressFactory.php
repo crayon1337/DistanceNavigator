@@ -24,7 +24,6 @@ class AddressFactory implements AddressFactoryInterface
     /**
      * @param array $data
      * @return array
-     * @throws InvalidDataException
      */
     public function resolveAddresses(array $data): array
     {
