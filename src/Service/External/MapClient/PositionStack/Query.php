@@ -48,7 +48,7 @@ class Query implements QueryInterface
         $this->accessKey = $accessKey;
     }
 
-    public function all(): array
+    public function informationPayload(): array
     {
         return [
             'access_key' => $this->accessKey,

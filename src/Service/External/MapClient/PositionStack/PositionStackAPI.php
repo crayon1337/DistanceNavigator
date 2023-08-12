@@ -42,7 +42,7 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
 
         try {
             $response = $this->positionStackClient->request('GET', '/v1/forward', [
-                'query' => $query->all()
+                'query' => $query->informationPayload()
             ]);
 
             return $this->hydrateCollection(id: $query->getId(), data: $response->toArray());
