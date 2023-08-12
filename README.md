@@ -31,7 +31,7 @@ Look [in this file](https://github.com/crayon1337/DistanceNavigator/blob/main/fi
 If everything went well you'll see a new `distances.csv` file created in the files directory and includes all the addresses and their distance to the HQ.
 
 # Run tests
-`./vendor/bin/phpunit`
+`php bin/phpunit`
 
 # Run linter
 `./vendor/bin/phpcs --standard=ruleset.xml src/`
