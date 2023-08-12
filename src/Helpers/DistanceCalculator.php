@@ -9,7 +9,7 @@ use App\DTO\Address;
 class DistanceCalculator
 {
     /**
-     * Optimized algorithm from http://www.codexworld.com
+     * Calculate distance between two points by latitude and longitude.
      *
      * @param Address $startingPoint
      * @param Address $destination
