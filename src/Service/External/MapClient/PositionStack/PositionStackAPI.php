@@ -21,13 +21,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * This class will be used to interact with PositionStack API
  * In order to find out geolocation information
  */
-class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
+final class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
     public function __construct(
-        protected HttpClientInterface $positionStackClient,
-        protected $accessKey
+        private readonly HttpClientInterface $positionStackClient,
+        private $accessKey
     ) {
     }
 

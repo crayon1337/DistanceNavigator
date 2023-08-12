@@ -7,7 +7,7 @@ namespace App\Service\External\MapClient\PositionStack;
 use App\Service\External\MapClient\MapAddress;
 use App\Service\External\MapClient\MapCollection;
 
-class PositionStackCollection implements MapCollection
+final class PositionStackCollection implements MapCollection
 {
     /**
      * @param array $data

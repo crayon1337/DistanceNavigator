@@ -6,7 +6,7 @@ namespace App\Service\External\MapClient\PositionStack;
 
 use App\Service\External\MapClient\MapAddress;
 
-class PositionStackAddress implements MapAddress
+final class PositionStackAddress implements MapAddress
 {
     public function __construct(
         public string $id,

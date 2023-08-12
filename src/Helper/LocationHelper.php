@@ -6,7 +6,7 @@ namespace App\Helper;
 
 use App\Service\External\MapClient\MapAddress;
 
-class LocationHelper
+final class LocationHelper
 {
     /**
      * Calculate distance between two points by latitude and longitude.

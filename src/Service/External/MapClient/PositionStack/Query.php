@@ -6,7 +6,7 @@ namespace App\Service\External\MapClient\PositionStack;
 
 use App\Service\External\MapClient\QueryInterface;
 
-class Query implements QueryInterface
+final class Query implements QueryInterface
 {
     public function __construct(
         private string $id,

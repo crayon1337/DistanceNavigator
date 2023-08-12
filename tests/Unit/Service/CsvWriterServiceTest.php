@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Unit\Helper;
+namespace App\Tests\Unit\Service;
 
-use App\Helper\FileHelper;
+use App\Service\CsvWriterService;
 use PHPUnit\Framework\TestCase;
 
-class FileHelperTest extends TestCase
+class CsvWriterServiceTest extends TestCase
 {
     public function testCsvFileCanBeExported(): void
     {
         // Setup
+        $fileWriter = new CsvWriterService();
         $data = [
             [
                 1,
@@ -24,7 +25,6 @@ class FileHelperTest extends TestCase
                 '25-05-2023',
             ],
         ];
-
         $headers = [
             'ID',
             'Name',
@@ -32,7 +32,7 @@ class FileHelperTest extends TestCase
         ];
 
         // Act
-        FileHelper::export('test.csv', $data, $headers);
+        $fileWriter->write('test.csv', $data, $headers);
 
         // Assert
         $this->assertFileExists('test.csv');

@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Exceptions\InvalidJsonException;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FileReaderService implements FileReaderInterface, LoggerAwareInterface
+final class FileReaderService implements FileReaderInterface
 {
-    use LoggerAwareTrait;
-
     private string $data = '{}';
 
     /**

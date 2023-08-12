@@ -8,8 +8,8 @@ use App\Exceptions\AddressNotFoundException;
 use App\Exceptions\InvalidDataException;
 use App\Exceptions\InvalidJsonException;
 use App\Factory\AddressFactoryInterface;
-use App\Helper\FileHelper;
 use App\Service\FileReaderInterface;
+use App\Service\FileWriterInterface;
 use App\Service\LocationInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 // The name of the command is what users type after "php bin/console"
 #[AsCommand(
@@ -26,12 +25,13 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
     description: 'Calculates distances between addresses and a destination',
     aliases: ['calculate:distance']
 )]
-class CalculateDistanceCommand extends Command
+final class CalculateDistanceCommand extends Command
 {
     public function __construct(
-        protected LocationInterface $locationService,
-        protected AddressFactoryInterface $addressFactory,
-        protected FileReaderInterface $fileReader,
+        private readonly LocationInterface $locationService,
+        private readonly AddressFactoryInterface $addressFactory,
+        private readonly FileReaderInterface $fileReader,
+        private readonly FileWriterInterface $fileWriter,
         private readonly string $defaultJsonFilePath = 'files/addresses.json',
         private readonly string $csvFilePath = 'files/distances.csv'
     ) {
@@ -75,7 +75,7 @@ class CalculateDistanceCommand extends Command
 
     private function generateCsv(array $distances, OutputInterface $output): void
     {
-        FileHelper::export(fileName: $this->csvFilePath, data: $distances, headers: $this->getTableHeader());
+        $this->fileWriter->write(fileName: $this->csvFilePath, data: $distances, headers: $this->getTableHeader());
         $output->writeln(messages: "[distances.csv] file has been generated.");
     }
 

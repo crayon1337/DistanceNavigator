@@ -12,14 +12,14 @@ use App\Service\External\MapClient\PositionStack\Query;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
-class LocationService implements LocationInterface, LoggerAwareInterface
+final class LocationService implements LocationInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
     /**
      * @param MapClientInterface $mapApi
      */
-    public function __construct(protected MapClientInterface $mapApi)
+    public function __construct(private readonly MapClientInterface $mapApi)
     {
     }
 
