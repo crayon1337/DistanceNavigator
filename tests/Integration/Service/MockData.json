@@ -1,0 +1,218 @@
+[
+  {
+    "data": [
+      {
+        "latitude": 51.6882,
+        "longitude": 5.298532,
+        "type": "address",
+        "name": "Sint Janssingel 92",
+        "number": "92",
+        "postal_code": "5211DA",
+        "street": "Sint Janssingel",
+        "confidence": 1,
+        "region": "North Brabant",
+        "region_code": "NB",
+        "county": null,
+        "locality": "'s Hertogenbosch",
+        "administrative_area": "'s-Hertogenbosch",
+        "neighbourhood": "Binnenstad-Centrum",
+        "country": "Netherlands",
+        "country_code": "NLD",
+        "continent": "Europe",
+        "label": "Sint Janssingel 92, 's Hertogenbosch, NB, Netherlands"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 52.26633,
+        "longitude": 6.78576,
+        "type": "address",
+        "name": "Deldenerstraat 70",
+        "number": "70",
+        "postal_code": "7551AH",
+        "street": "Deldenerstraat",
+        "confidence": 1,
+        "region": "Overijssel",
+        "region_code": "OV",
+        "county": null,
+        "locality": "Hengelo",
+        "administrative_area": "Hengelo",
+        "neighbourhood": "Weidedorp",
+        "country": "Netherlands",
+        "country_code": "NLD",
+        "continent": "Europe",
+        "label": "Deldenerstraat 70, Hengelo, OV, Netherlands"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 21.196102,
+        "longitude": 72.815766,
+        "type": "locality",
+        "name": "Surat",
+        "number": null,
+        "postal_code": null,
+        "street": null,
+        "confidence": 0.6,
+        "region": "Gujarat",
+        "region_code": "GJ",
+        "county": "Surat",
+        "locality": "Surat",
+        "administrative_area": null,
+        "neighbourhood": null,
+        "country": "India",
+        "country_code": "IND",
+        "continent": "Asia",
+        "label": "Surat, GJ, India"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 51.92366,
+        "longitude": 4.471626,
+        "type": "address",
+        "name": "Weena 505",
+        "number": "505",
+        "postal_code": "3013AL",
+        "street": "Weena",
+        "confidence": 1,
+        "region": "South Holland",
+        "region_code": "ZH",
+        "county": null,
+        "locality": "Rotterdam",
+        "administrative_area": null,
+        "neighbourhood": "C.S. Kwartier",
+        "country": "Netherlands",
+        "country_code": "NLD",
+        "continent": "Europe",
+        "label": "Weena 505, Rotterdam, ZH, Netherlands"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 51.523747,
+        "longitude": -0.158555,
+        "type": "address",
+        "name": "221B Baker Street",
+        "number": "221B",
+        "postal_code": "NW1 6XE",
+        "street": "Baker Street",
+        "confidence": 1,
+        "region": "Greater London",
+        "region_code": null,
+        "county": null,
+        "locality": "London",
+        "administrative_area": null,
+        "neighbourhood": "Lisson Grove",
+        "country": "United Kingdom",
+        "country_code": "GBR",
+        "continent": "Europe",
+        "label": "221B Baker Street, London, England, United Kingdom"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 38.897675,
+        "longitude": -77.036547,
+        "type": "address",
+        "name": "1600 Pennsylvania Avenue NW",
+        "number": "1600",
+        "postal_code": "20500",
+        "street": "Pennsylvania Avenue NW",
+        "confidence": 1,
+        "region": "District of Columbia",
+        "region_code": "DC",
+        "county": "District of Columbia",
+        "locality": "Washington",
+        "administrative_area": null,
+        "neighbourhood": "White House Grounds",
+        "country": "United States",
+        "country_code": "USA",
+        "continent": "North America",
+        "label": "1600 Pennsylvania Avenue NW, Washington, DC, USA"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 40.68295,
+        "longitude": -73.9708,
+        "type": "locality",
+        "name": "New York",
+        "number": null,
+        "postal_code": null,
+        "street": null,
+        "confidence": 0.6,
+        "region": "New York",
+        "region_code": "NY",
+        "county": "Kings County",
+        "locality": "New York",
+        "administrative_area": null,
+        "neighbourhood": null,
+        "country": "United States",
+        "country_code": "USA",
+        "continent": "North America",
+        "label": "New York, NY, USA"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 52.051262,
+        "longitude": -2.685989,
+        "type": "venue",
+        "name": "Martha House",
+        "number": null,
+        "postal_code": "HR1 1UB",
+        "street": "Old Eign Hill",
+        "confidence": 1,
+        "region": "Herefordshire",
+        "region_code": null,
+        "county": "County of Herefordshire",
+        "locality": "Hereford",
+        "administrative_area": "Hereford Civil Parish",
+        "neighbourhood": null,
+        "country": "United Kingdom",
+        "country_code": "GBR",
+        "continent": "Europe",
+        "label": "Martha House, Hereford, England, United Kingdom"
+      }
+    ]
+  },
+  {
+    "data": [
+      {
+        "latitude": 34.664703,
+        "longitude": -120.117754,
+        "type": "locality",
+        "name": "Los Olivos",
+        "number": null,
+        "postal_code": null,
+        "street": null,
+        "confidence": 0.6,
+        "region": "California",
+        "region_code": "CA",
+        "county": "Santa Barbara County",
+        "locality": "Los Olivos",
+        "administrative_area": null,
+        "neighbourhood": null,
+        "country": "United States",
+        "country_code": "USA",
+        "continent": "North America",
+        "label": "Los Olivos, CA, USA"
+      }
+    ]
+  }
+]

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Service\External;
+namespace App\Service\External\PositionStack;
 
 use App\DTO\Address;
 use App\Exceptions\AddressNotFoundException;
+use App\Service\External\MapClientInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -48,7 +49,7 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
             $data = $response->toArray();
 
             if (empty($data['data'])) {
-                throw new AddressNotFoundException("Could not find results for {$address->getName()}");
+                throw new AddressNotFoundException(message: "Could not find results for {$address->getName()}");
             }
 
             return $this->hydrateAddressObject($address, $data['data']);
@@ -59,16 +60,15 @@ class PositionStackAPI implements MapClientInterface, LoggerAwareInterface
             RedirectionExceptionInterface |
             DecodingExceptionInterface $exception
         ) {
-            $this->logger->critical(
-                sprintf(
-                    'Could not fetch forward geo information for %s. Message: %s',
-                    $address->getName(),
-                    $exception->getMessage()
-                ),
-                $exception->getTrace()
+            $message = sprintf(
+                'Could not fetch forward geo information for %s. Message: %s',
+                $address->getName(),
+                $exception->getMessage()
             );
 
-            throw new AddressNotFoundException('Could not fetch forward geo information for %s. Message: %s');
+            $this->logger->critical(message: $message, context: $exception->getTrace());
+
+            throw new AddressNotFoundException(message: $message);
         }
     }
 

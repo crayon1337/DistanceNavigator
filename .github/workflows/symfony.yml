@@ -41,3 +41,5 @@ jobs:
         run: php bin/console cache:clear
       - name: Run coding standard checker
         run: vendor/bin/phpcs --standard=ruleset.xml --ignore=Kernel.php src/
+      - name: Execute tests
+        run: php bin/phpunit

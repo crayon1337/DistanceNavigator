@@ -8,9 +8,9 @@ interface FileReaderInterface
 {
     /**
      * @param string $filePath
-     * @return FileService
+     * @return FileReaderService
      */
-    public function make(string $filePath): FileService;
+    public function read(string $filePath): FileReaderService;
 
     /**
      * @return string

@@ -3,6 +3,7 @@
 namespace App\Service\External;
 
 use App\DTO\Address;
+use App\DTO\Query;
 use App\Exceptions\AddressNotFoundException;
 
 interface MapClientInterface

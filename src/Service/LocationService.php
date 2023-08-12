@@ -6,7 +6,7 @@ namespace App\Service;
 
 use App\DTO\Address;
 use App\Exceptions\AddressNotFoundException;
-use App\Helpers\DistanceCalculator;
+use App\Helper\LocationHelper;
 use App\Service\External\MapClientInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -37,10 +37,10 @@ class LocationService implements LocationInterface, LoggerAwareInterface
             // If things goes wrong. We need to continue. So that, we only skip the address
             // We had problem with. Better some than none.
             try {
-                $addressObject = $this->mapApi->resolveAddressInfo($address);
+                $addressObject = $this->mapApi->resolveAddressInfo(address: $address);
 
                 $distances[] = [
-                    'distance' => DistanceCalculator::make($addressObject, $destination),
+                    'distance' => LocationHelper::calculateDistance($addressObject, $destination),
                     'name' => $address->getName(),
                     'address' => $address->getAddress(),
                 ];
@@ -65,7 +65,7 @@ class LocationService implements LocationInterface, LoggerAwareInterface
         foreach ($distances as $index => $distance) {
             $formattedDistances[] = [
                 'id' => $index + 1,
-                'distance' => DistanceCalculator::label($distance['distance']),
+                'distance' => LocationHelper::getDistanceLabel($distance['distance']),
                 'name' => $distance['name'],
                 'address' => $distance['address']
             ];

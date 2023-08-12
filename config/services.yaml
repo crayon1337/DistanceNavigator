@@ -22,7 +22,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Service\External\PositionStackAPI:
+    App\Service\External\PositionStack\PositionStackAPI:
         arguments:
             $accessKey: '%app.position_stack_access_key%'
 

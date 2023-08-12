@@ -8,7 +8,7 @@ use App\Exceptions\AddressNotFoundException;
 use App\Exceptions\InvalidDataException;
 use App\Exceptions\InvalidJsonException;
 use App\Factory\AddressFactoryInterface;
-use App\Helpers\FileHelper;
+use App\Helper\FileHelper;
 use App\Service\FileReaderInterface;
 use App\Service\LocationInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -55,7 +55,7 @@ class CalculateDistanceCommand extends Command
         $filePath = $input->getArgument(name: 'file') ?? $this->defaultJsonFilePath;
 
         try {
-            $data = $this->fileReader->make(filePath: $filePath)->toArray();
+            $data = $this->fileReader->read(filePath: $filePath)->toArray();
 
             $destination = $this->addressFactory->make(data: $data['destination']);
             $addresses = $this->addressFactory->resolveAddresses(data: $data['addresses']);

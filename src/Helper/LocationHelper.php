@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Helpers;
+namespace App\Helper;
 
 use App\DTO\Address;
 
-class DistanceCalculator
+class LocationHelper
 {
     /**
      * Calculate distance between two points by latitude and longitude.
@@ -16,7 +16,7 @@ class DistanceCalculator
      *
      * @return float Distance between points in [km]
      */
-    public static function make(Address $startingPoint, Address $destination): float
+    public static function calculateDistance(Address $startingPoint, Address $destination): float
     {
         $rad = M_PI / 180;
 
@@ -32,7 +32,7 @@ class DistanceCalculator
         return acos($dist) / $rad * 60 *  1.853;
     }
 
-    public static function label(float $distance): string
+    public static function getDistanceLabel(float $distance): string
     {
         return number_format($distance, 2) . ' km';
     }

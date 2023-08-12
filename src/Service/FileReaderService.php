@@ -10,17 +10,17 @@ use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FileService implements FileReaderInterface, LoggerAwareInterface
+class FileReaderService implements FileReaderInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    private string $data;
+    private string $data = '{}';
 
     /**
      * @param string $filePath
-     * @return $this
+     * @return FileReaderService
      */
-    public function make(string $filePath): FileService
+    public function read(string $filePath): FileReaderService
     {
         $fileSystem = new Filesystem();
 
