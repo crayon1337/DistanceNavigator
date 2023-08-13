@@ -8,6 +8,8 @@ use App\Exceptions\AddressNotFoundException;
 interface LocationInterface
 {
     /**
+     * Calculate the distance between given array of addresses to a given destination.
+     *
      * @param Address $destinationAddress
      * @param Address[] $addresses
      * @return array

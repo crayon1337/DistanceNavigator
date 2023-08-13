@@ -23,13 +23,13 @@ final class LocationHelper
         //Calculate distance from latitude and longitude
         $theta = $startingPoint->getLongitude() - $destination->getLongitude();
 
-        $dist = sin($startingPoint->getLatitude() * $rad)
+        $distance = sin($startingPoint->getLatitude() * $rad)
             * sin($destination->getLatitude() * $rad)
             + cos($startingPoint->getLatitude() * $rad)
             * cos($destination->getLatitude() * $rad)
             * cos($theta * $rad);
 
-        return acos($dist) / $rad * 60 *  1.853;
+        return acos($distance) / $rad * 60 *  1.853;
     }
 
     /**

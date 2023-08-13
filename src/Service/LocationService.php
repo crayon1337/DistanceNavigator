@@ -63,7 +63,7 @@ final class LocationService implements LocationInterface, LoggerAwareInterface
     {
         return array_map(function ($index, $distance) {
             return [
-                'id' => $index + 1,
+                'id' => ++$index,
                 'distance' => LocationHelper::getDistanceLabel($distance['distance']),
                 'name' => $distance['name'],
                 'address' => $distance['address']

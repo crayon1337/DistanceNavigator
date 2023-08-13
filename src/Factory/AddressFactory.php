@@ -33,6 +33,7 @@ class AddressFactory implements AddressFactoryInterface
             try {
                 $addresses[] = $this->make($address);
             } catch (InvalidDataException) {
+                // We need to skip this row. To see, if we are able to resolve some other addresses.
                 continue;
             }
         }
